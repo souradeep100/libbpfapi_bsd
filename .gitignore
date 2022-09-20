@@ -1,2 +1,6 @@
 .build
 .vscode
+
+# auto-generated files
+**/prototypes/*.c
+**/prototypes/*.h
