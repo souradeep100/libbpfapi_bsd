@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "../lib/bpf_lib.h"
 
 int main (int argc, char **argv)
@@ -8,7 +9,7 @@ int main (int argc, char **argv)
     printf("Opened connection...\n");
 
     struct ebpf_verify_arg args;
-    int size = 10;
+    uint size = 10;
     args.log_size = &size;
 
     int result = ebpf_verify_load_program(&args, clt);

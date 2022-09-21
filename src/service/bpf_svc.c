@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "../prototypes/bpf_svc.h"
 
 int result;
