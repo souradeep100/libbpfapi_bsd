@@ -217,14 +217,35 @@ struct _ebpf_program_load_info {
 
 typedef struct _ebpf_program_load_info ebpf_program_load_info;
 
-struct ebpf_verify_arg {
+struct ebpf_verify_and_load_arg {
     ebpf_program_load_info *info;
     unsigned int *log_size;
     char  *logs;
 };
 
-program VERIFY_AND_LOAD {
-    version VERIFY_AND_LOAD_V1 {
-        int EBPF_VERIFY_LOAD_PROGRAM(ebpf_verify_arg) = 1;
+struct ebpf_verify_arg {
+    string path<>;
+};
+
+enum edpf_verify_result_code
+{
+	EBPF_VERIFIER_NOT_PROCESSED,
+	EBPF_VERIFIER_CALL_ERR,
+	EBPF_VERIFIER_ABNOR_EXIT,
+	EBPF_VERIFIER_NON_ZERO_EXIT,
+	EBPF_VERIFIER_PASS,
+	EBPF_VERIFIER_INVALID
+};
+
+struct edpf_verify_result
+{
+	edpf_verify_result_code result;
+	string message<>;
+};
+
+program BPF_SVC {
+    version BPF_SVC_V1 {
+        int EBPF_VERIFY_LOAD_PROGRAM(ebpf_verify_and_load_arg) = 1;
+		edpf_verify_result EBPF_VERIFY_PROGRAM(ebpf_verify_arg) = 2;
     } = 1;
 } = 0x2ffffffa;
