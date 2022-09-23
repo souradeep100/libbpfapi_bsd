@@ -5,7 +5,7 @@
 
 CLIENT* ebpf_connect(char *host);
 
-int ebpf_verify_load_program(ebpf_verify_and_load_arg *args, CLIENT* clt);
+ebpf_result_t ebpf_verify_load_program(ebpf_verify_and_load_arg *args, CLIENT* clt);
 
 edpf_verify_result* ebpf_verify_program(ebpf_verify_arg *args, CLIENT* clt);
 

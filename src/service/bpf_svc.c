@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include "../prototypes/bpf_svc.h"
+#include "bpf.h"
 
 static void log_info(const char* fmt, ...)
 {
@@ -24,17 +25,47 @@ static char* get_verifier_path()
     return path;
 }
 
-int * ebpf_verify_load_program_1_svc(ebpf_verify_and_load_arg *args, struct svc_req *req)
+ebpf_result_t ebpf_verify_and_load_program(
+    const unsigned int program_type,
+    int program_handle,
+    ebpf_execution_context_t execution_context,
+    ebpf_execution_type_t execution_type,
+    unsigned int handle_map_count,
+    const original_fd_handle_map_t* handle_map,
+    uint32_t instruction_count,
+    const ebpf_inst_t* instructions,
+    const char** error_message,
+    unsigned int* error_message_size)
 {
-    static int result = 0;
+}
+
+ebpf_result_t* ebpf_verify_load_program_1_svc(ebpf_verify_and_load_arg *args, struct svc_req *req)
+{
+    static ebpf_result_t result = 0;
     if (!args)
     {
         log_info("Arguments are empty\n");
-        result = -1;
+        result = EBPF_INVALID_ARGUMENT;
         return &result;
     }
 
+    // implement thread-local handle: https://github.com/microsoft/ebpf-for-windows/blob/1160f7914e43ebac5e3619d662754eef1af02fb8/ebpfsvc/rpc_api.cpp#L27
+
     log_info("Verifying BPF program...");
+
+    result = ebpf_verify_and_load_program(
+        args->info->program_type,
+        args->info->program_handle,
+        args->info->execution_context,
+        args->info->execution_type,
+        args->info->map_count,
+        args->info->handle_map,
+        args->info->instruction_count,
+        (ebpf_inst_t*)args->info->instructions,
+        args->logs,
+        args->log_size);
+
+    // TODO: clear thread local storage: https://github.com/microsoft/ebpf-for-windows/blob/1160f7914e43ebac5e3619d662754eef1af02fb8/ebpfsvc/rpc_api.cpp#L41
 
     return &result;
 }

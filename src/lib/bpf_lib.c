@@ -12,23 +12,27 @@ CLIENT* ebpf_connect(char *host)
     return clt;
 }
 
-int ebpf_verify_load_program(ebpf_verify_and_load_arg *args, CLIENT* clt)
+ebpf_result_t ebpf_verify_load_program(ebpf_verify_and_load_arg *args, CLIENT* clt)
 {
-    if (!args)
+    if (!args || !args->info)
     {
         printf("Arguments are NULL, please fill in the verification arguments.\n");
-        return -1;
+        return EBPF_INVALID_ARGUMENT;
     }
 
-    int *result = ebpf_verify_load_program_1(args, clt);
+    if (args->info->instruction_count == 0) {
+        return EBPF_INVALID_ARGUMENT;
+    }
+
+    ebpf_result_t* result = ebpf_verify_load_program_1(args, clt);
     if (result == NULL) {
         printf("Call to eBPF server failed.\n");
-        return 1;
+        return EBPF_FAILED;
     }
 
     printf("Received request. Log size: %u\n", *(args->log_size));
 
-    return 0;
+    return *result;
 }
 
 edpf_verify_result* ebpf_verify_program(ebpf_verify_arg *args, CLIENT* clt)
