@@ -34,7 +34,7 @@ ebpf_result_t ebpf_verify_and_load_program(
     const original_fd_handle_map_t* handle_map,
     uint32_t instruction_count,
     const ebpf_inst_t* instructions,
-    const char** error_message,
+    const log_str_t* error_message,
     unsigned int* error_message_size)
 {
 }
