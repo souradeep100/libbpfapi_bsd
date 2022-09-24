@@ -1,4 +1,5 @@
 
+#include <string>
 // TODO: link ebpf-verifier as a lib
 
 // #include "CLI11.hpp"
@@ -36,32 +37,33 @@
 //     return EBPF_SUCCESS; // Success.
 // }
 
-// extern const ebpf_platform_t g_ebpf_platform_freebsd;
+extern const ebpf_platform_t g_ebpf_platform_freebsd;
 
-// ebpf_result_t verify_byte_code(
-//     const unsigned int* program_type,
-//     const ebpf_inst_t* instruction_array,
-//     unsigned int instruction_count,
-//     log_str_t *error_message,
-//     unsigned int *error_message_size)
-// {
-//     const ebpf_platform_t* platform = &g_ebpf_platform_freebsd;
-//     std::vector<ebpf_inst_t> instructions{instruction_array, instruction_array + instruction_count};
-//     program_info_t info{platform};
-//     std::string section;
-//     std::string file;
-//     // try {
-//     //     info.type = get_program_type_windows(*program_type);
-//     // } catch (std::runtime_error e) {
-//     //     error << "error: " << e.what();
-//     //     *error_message = allocate_string(error.str());
-//     //     return EBPF_VERIFICATION_FAILED;
-//     // }
+ebpf_result_t verify_byte_code(
+    const unsigned int* program_type,
+    const ebpf_inst_t* instruction_array,
+    unsigned int instruction_count,
+    log_str_t *error_message,
+    unsigned int *error_message_size)
+{
+    const ebpf_platform_t* platform = &g_ebpf_platform_freebsd;
+    return EBPF_INSUFFICIENT_BUFFER;
+    // std::vector<ebpf_inst_t> instructions{instruction_array, instruction_array + instruction_count};
+    // program_info_t info{platform};
+    // std::string section;
+    // std::string file;
+    // // try {
+    // //     info.type = get_program_type_windows(*program_type);
+    // // } catch (std::runtime_error e) {
+    // //     error << "error: " << e.what();
+    // //     *error_message = allocate_string(error.str());
+    // //     return EBPF_VERIFICATION_FAILED;
+    // // }
 
-//     raw_program raw_prog{file, section, instructions, info};
+    // raw_program raw_prog{file, section, instructions, info};
 
-//     return _analyze(raw_prog, error_message, error_message_size);
-// }
+    // return _analyze(raw_prog, error_message, error_message_size);
+}
 
 ebpf_result_t ebpf_verify_and_load_program(
     const unsigned int program_type,

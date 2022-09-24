@@ -4,7 +4,9 @@
 #define PTYPE_PRIVILEGED(name, descr, native_type, prefixes) \
                         {name, descr, 0, prefixes, true}
 
+#include "freebsd_platform.hpp"
 #include "ebpf_verifier.hpp"
+#include "gpl/spec_type_descriptors.hpp"
 
 // Map definitions as they appear in an ELF file, so field width matters.
 struct bpf_load_map_def {
