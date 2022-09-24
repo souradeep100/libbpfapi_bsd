@@ -3,7 +3,7 @@
 
 // #include "CLI11.hpp"
 
-// #include "ebpf_verifier.hpp"
+#include "ebpf_verifier.hpp"
 // #include "verifier/freebsd/freebsd_platform.hpp"
 
 #include "../prototypes/bpf_svc.h"
