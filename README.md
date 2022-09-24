@@ -8,7 +8,7 @@
 
 ## Build
 
-Run 'src/build.sh'
+Run 'scripts/build.sh'
 
 ## Running the service
 
