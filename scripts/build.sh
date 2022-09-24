@@ -1,7 +1,7 @@
 echo "Building ebpf-verifier..."
 cd ../external/ebpf-verifier
-# cmake -B build -DCMAKE_BUILD_TYPE=Release
-# cmake --build build
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
 
 echo "Creating build directories..."
 cd ../../
