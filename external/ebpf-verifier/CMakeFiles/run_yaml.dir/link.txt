@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/run_yaml.dir/src/main/run_yaml.cpp.o  -o /home/edguer/Projects/run_yaml  libebpfverifier.a /usr/lib/x86_64-linux-gnu/libyaml-cpp.so.0.6.2 
