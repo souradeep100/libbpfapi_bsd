@@ -47,7 +47,6 @@ ebpf_result_t verify_byte_code(
     unsigned int *error_message_size)
 {
     const ebpf_platform_t* platform = &g_ebpf_platform_linux;
-    return EBPF_INSUFFICIENT_BUFFER;
     std::vector<ebpf_inst> instructions{instruction_array, instruction_array + instruction_count};
     program_info info{platform};
     std::string section;
