@@ -48,16 +48,9 @@ struct _ebpf_program_load_info {
 
 typedef struct _ebpf_program_load_info ebpf_program_load_info;
 
-struct _log_str {
-    string log<>;
-};
-
-typedef struct _log_str log_str_t; 
-
 struct ebpf_verify_and_load_arg {
     ebpf_program_load_info *info;
-    log_str_t *logs;
-    unsigned int *log_size;
+    string error_message<>;
 };
 
 struct ebpf_verify_arg {

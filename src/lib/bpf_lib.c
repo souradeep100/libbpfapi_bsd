@@ -20,9 +20,9 @@ ebpf_result_t ebpf_verify_load_program(ebpf_verify_and_load_arg *args, CLIENT* c
         return EBPF_INVALID_ARGUMENT;
     }
 
-    if (args->info->instruction_count == 0) {
-        return EBPF_INVALID_ARGUMENT;
-    }
+    // if (args->info->instruction_count == 0) {
+    //     return EBPF_INVALID_ARGUMENT;
+    // }
 
     ebpf_result_t* result = ebpf_verify_load_program_1(args, clt);
     if (result == NULL) {
@@ -30,7 +30,7 @@ ebpf_result_t ebpf_verify_load_program(ebpf_verify_and_load_arg *args, CLIENT* c
         return EBPF_FAILED;
     }
 
-    printf("Received request. Log size: %u\n", *(args->log_size));
+    printf("Received request. Log size: %d\n", (int)*result);
 
     return *result;
 }

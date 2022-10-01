@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+#include "platform.hpp"
+
 void set_verification_in_progress(bool value);
 
 void log_info(const char* fmt, ...);
