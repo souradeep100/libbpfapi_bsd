@@ -20,9 +20,9 @@ set(rpc_server_xdr_src "${RPC_AUTOGEN_DROP}/bpf_svc_xdr.c")
 
 configure_file("src/prototypes/bpf_svc.x" "${proto_src}" COPYONLY)
 
-add_custom_target(auto_gen ALL 
-  COMMAND rpcgen "${proto_src}"
-  BYPRODUCTS "${rpc_proto_hdr}" "${rpc_client_stub_src}" "${rpc_server_stub_src}" "{rpc_server_xdr_src}")
+# add_custom_target(auto_gen ALL 
+#   COMMAND rpcgen "${proto_src}"
+#   BYPRODUCTS "${rpc_proto_hdr}" "${rpc_client_stub_src}" "${rpc_server_stub_src}" "{rpc_server_xdr_src}")
 
 # add_custom_command(
 #     OUTPUT "${rpc_proto_hdr}" "${rpc_client_stub_src}" "${rpc_server_stub_src}" "{rpc_server_xdr_src}"
@@ -40,7 +40,6 @@ add_executable(
 
   src/service/common.cpp
   src/service/ebpf_verify_and_load_program.cpp
-  src/service/ebpf_verify_program.cpp
   src/service/verifier/verifier_service.cpp
 
   ${rpc_server_stub_src}
@@ -51,22 +50,26 @@ target_link_libraries("bpf_svc" PRIVATE
   "external::ebpfverifier"
 )
 
-# samples
-add_executable(
-  verification_and_load_test
+add_library(
+  bpf_lib
 
-  src/samples/verification_and_load_test.c
-  src/lib/bpf_lib.c
+  src/lib/bpf_lib.cpp
 
   ${rpc_client_stub_src}
   ${rpc_server_xdr_src}
 )
+
+# samples
 add_executable(
-  verification_test
+  verification_and_load_test
 
-  src/samples/verification_test.c
-  src/lib/bpf_lib.c
+  src/samples/verification_and_load_test.cpp
+)
 
-  ${rpc_client_stub_src}
-  ${rpc_server_xdr_src}
+target_link_libraries("verification_and_load_test" PRIVATE
+  "bpf_lib"
+)
+
+target_link_libraries("verification_and_load_test" PRIVATE
+  "external::ebpfverifier"
 )

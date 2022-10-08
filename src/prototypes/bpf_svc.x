@@ -32,11 +32,37 @@ struct _original_fd_handle_map {
 
 typedef struct _original_fd_handle_map original_fd_handle_map_t;
 
+struct _string_list
+{
+	string str<>;
+};
+
+typedef _string_list string_list;
+
+struct __ebpf_context_descriptor {
+    int size;
+    int data;
+    int end;
+    int meta;
+};
+
+typedef __ebpf_context_descriptor ebpf_cxt_descriptor_t;
+
+struct __ebpf_program_type {
+	string name<>;
+	string section_prefixes<>;
+    ebpf_cxt_descriptor_t context_descriptor;
+    unsigned int platform_specific_data;
+    bool is_privileged;
+};
+
+typedef __ebpf_program_type ebpf_prog_type_t;
+
 struct _ebpf_program_load_info {
     string object_name<>;
     string section_name<>;
     string program_name<>;
-    unsigned int program_type;
+    ebpf_prog_type_t* program_type;
     ebpf_execution_type_t execution_type;
 	ebpf_execution_context_t execution_context;
     int program_handle;
@@ -112,6 +138,5 @@ struct edpf_verify_result
 program BPF_SVC {
     version BPF_SVC_V1 {
         ebpf_result_t EBPF_VERIFY_LOAD_PROGRAM(ebpf_verify_and_load_arg) = 1;
-		edpf_verify_result EBPF_VERIFY_PROGRAM(ebpf_verify_arg) = 2;
     } = 1;
 } = 0x2ffffffa;

@@ -42,13 +42,13 @@ extern const ebpf_platform_t g_ebpf_platform_linux;
 extern const ebpf_verifier_options_t ebpf_verifier_default_options;
 
 ebpf_result_t verify_byte_code(
-    const unsigned int* program_type,
+    const ebpf_prog_type_t* program_type,
     const ebpf_inst* instruction_array,
     unsigned int instruction_count,
     char *error_message)
 {
     const ebpf_platform_t* platform = &g_ebpf_platform_linux;
-    // std::vector<ebpf_inst> instructions{instruction_array, instruction_array + instruction_count};
+    std::vector<ebpf_inst> instructions{instruction_array, instruction_array + instruction_count};
     log_info("Built instructions vector...\n");
     program_info info{platform};
     std::string section;
@@ -58,7 +58,8 @@ ebpf_result_t verify_byte_code(
     {
         // TODO: verification works by using read_elf, need to start implementing posix functions
         log_info("Opening file...\n");
-        raw_progs = read_elf("../external/ebpf-verifier/ebpf-samples/cilium/bpf_lxc.o", "2/1", &ebpf_verifier_default_options, &g_ebpf_platform_linux);
+        raw_progs = read_elf("/home/edguer/Projects/libbpfapi_bsd/external/ebpf-verifier/ebpf-samples/cilium/bpf_lxc.o", "2/1", &ebpf_verifier_default_options, &g_ebpf_platform_linux);
+        info.type = raw_progs.back().info.type;
         log_info("Parsed ELF file\n");
         // info.type = get_program_type_windows(*program_type);
     }
@@ -73,5 +74,7 @@ ebpf_result_t verify_byte_code(
         log_info("More than 1 raw_progs...\n");
     }
 
-    return _analyze(raw_progs.back(), error_message);
+    raw_program raw_prog{file, section, instructions, info};
+
+    return _analyze(raw_prog, error_message);
 }

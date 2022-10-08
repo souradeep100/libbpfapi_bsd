@@ -9,7 +9,7 @@
 #include "verifier/verifier_service.hpp"
 
 ebpf_result_t ebpf_verify_and_load_program(
-    const unsigned int program_type,
+    ebpf_prog_type_t *program_type,
     int program_handle,
     ebpf_execution_context_t execution_context,
     ebpf_execution_type_t execution_type,
@@ -31,7 +31,7 @@ ebpf_result_t ebpf_verify_and_load_program(
         set_verification_in_progress(true);
 
         log_info("Calling verify_byte_code...\n");
-        result = verify_byte_code(&program_type, instructions, instruction_count, error_message);
+        result = verify_byte_code(program_type, instructions, instruction_count, error_message);
     }
     catch (const std::bad_alloc&)
     {
@@ -69,14 +69,14 @@ ebpf_result_t *ebpf_verify_load_program_1_svc(ebpf_verify_and_load_arg *args, st
     log_info("Verifying BPF program...\n");
 
     result = ebpf_verify_and_load_program(
-        args->info->program_type,
+        NULL,
         args->info->program_handle,
         args->info->execution_context,
         args->info->execution_type,
         args->info->map_count,
         args->info->handle_map,
         args->info->instruction_count,
-        (ebpf_inst*)args->info->instructions,
+        reinterpret_cast<ebpf_inst*>(args->info->instructions),
         args->error_message);
 
     ebpf_clear_thread_local_storage();
