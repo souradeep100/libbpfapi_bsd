@@ -52,23 +52,29 @@ ebpf_result_t ebpf_verify_and_load_program(
     return result;
 }
 
-ebpf_result_t *ebpf_verify_load_program_1_svc(ebpf_verify_and_load_arg *args, struct svc_req *req)
+edpf_verify_result *ebpf_verify_load_program_1_svc(ebpf_verify_and_load_arg *args, struct svc_req *req)
 {
     log_info("Received call to ebpf_verify_load_program_1_svc...\n");
-    static ebpf_result_t result = EBPF_SUCCESS;
+    static edpf_verify_result result { .result = EBPF_SUCCESS };
+    result.message = "."; // must fill something, otherwise rpc fails
+
     if (!args)
     {
         log_info("Arguments are empty\n");
-        result = EBPF_INVALID_ARGUMENT;
+        result.result = EBPF_INVALID_ARGUMENT;
         return &result;
     }
+
+    log_info("Program name:\n");
+    log_info(args->info->program_type->name);
+    log_info("\n");
 
     log_info("Setting program under verification...\n");
     set_program_under_verification(args->info->program_handle);
 
     log_info("Verifying BPF program...\n");
 
-    result = ebpf_verify_and_load_program(
+    result.result = ebpf_verify_and_load_program(
         NULL,
         args->info->program_handle,
         args->info->execution_context,
@@ -77,7 +83,7 @@ ebpf_result_t *ebpf_verify_load_program_1_svc(ebpf_verify_and_load_arg *args, st
         args->info->handle_map,
         args->info->instruction_count,
         reinterpret_cast<ebpf_inst*>(args->info->instructions),
-        args->error_message);
+        result.message);
 
     ebpf_clear_thread_local_storage();
 

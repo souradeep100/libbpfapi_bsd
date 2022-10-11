@@ -16,9 +16,9 @@ enum _ebpf_execution_context
 typedef enum _ebpf_execution_context ebpf_execution_context_t;
 
 struct _ebpf_instruction {
-    unsigned int opcode;
-    unsigned int dst_src;
-    short int offset;
+    opaque opcode[1];
+    opaque dst_src[1];
+    short offset;
     int imm;
 };
 
@@ -48,15 +48,15 @@ struct __ebpf_context_descriptor {
 
 typedef __ebpf_context_descriptor ebpf_cxt_descriptor_t;
 
-struct __ebpf_program_type {
+struct _ebpf_prog_type {
 	string name<>;
-	string section_prefixes<>;
     ebpf_cxt_descriptor_t context_descriptor;
     unsigned int platform_specific_data;
+	opaque section_prefixes[100];
     bool is_privileged;
 };
 
-typedef __ebpf_program_type ebpf_prog_type_t;
+typedef _ebpf_prog_type ebpf_prog_type_t;
 
 struct _ebpf_program_load_info {
     string object_name<>;
@@ -76,7 +76,6 @@ typedef struct _ebpf_program_load_info ebpf_program_load_info;
 
 struct ebpf_verify_and_load_arg {
     ebpf_program_load_info *info;
-    string error_message<>;
 };
 
 struct ebpf_verify_arg {
@@ -131,12 +130,12 @@ enum edpf_verify_result_code
 
 struct edpf_verify_result
 {
-	edpf_verify_result_code result;
+	ebpf_result_t result;
 	string message<>;
 };
 
 program BPF_SVC {
     version BPF_SVC_V1 {
-        ebpf_result_t EBPF_VERIFY_LOAD_PROGRAM(ebpf_verify_and_load_arg) = 1;
+        edpf_verify_result EBPF_VERIFY_LOAD_PROGRAM(ebpf_verify_and_load_arg) = 1;
     } = 1;
 } = 0x2ffffffa;
