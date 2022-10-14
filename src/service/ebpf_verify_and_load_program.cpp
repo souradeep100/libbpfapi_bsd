@@ -74,6 +74,29 @@ edpf_verify_result *ebpf_verify_load_program_1_svc(ebpf_verify_and_load_arg *arg
 
     log_info("Verifying BPF program...\n");
 
+    printf("val: ");
+    for(int i = 0; i < sizeof(*(args->info->instructions.instructions_val)); i++)
+    {
+        printf("%02x",((unsigned char*)args->info->instructions.instructions_val)[i]);
+    }
+    printf(" opcode %i", args->info->instructions.instructions_val->offset);
+    printf("\n");
+
+    std::vector<ebpf_instruction_t> instructions(args->info->instructions.instructions_val, args->info->instructions.instructions_val + args->info->instructions.instructions_len);
+    short count = 0;
+    for(ebpf_instruction_t inst : instructions)
+    {
+        count++;
+        printf("received inst1: ");
+        for(int i = 0; i < sizeof(inst); i++)
+        {
+            printf("%02x",((unsigned char*)&inst)[i]);
+        }
+        printf(" opcode %i", inst.offset);
+        printf("\n");
+    }
+    printf("count: %i; len: %i\n", count, args->info->instructions.instructions_len);
+
     result.result = ebpf_verify_and_load_program(
         NULL,
         args->info->program_handle,
@@ -81,8 +104,8 @@ edpf_verify_result *ebpf_verify_load_program_1_svc(ebpf_verify_and_load_arg *arg
         args->info->execution_type,
         args->info->map_count,
         args->info->handle_map,
-        args->info->instruction_count,
-        reinterpret_cast<ebpf_inst*>(args->info->instructions),
+        args->info->instructions.instructions_len,
+        reinterpret_cast<ebpf_inst*>(args->info->instructions.instructions_val),
         result.message);
 
     ebpf_clear_thread_local_storage();

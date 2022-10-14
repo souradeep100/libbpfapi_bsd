@@ -22,7 +22,7 @@ edpf_verify_result* ebpf_verify_program(ebpf_verify_and_load_arg *args, CLIENT* 
         return &result;
     }
 
-    if (args->info->instruction_count == 0)
+    if (args->info->instructions.instructions_len == 0)
     {
         printf("No instructions were provided.\n");
         result.result = EBPF_INVALID_ARGUMENT;
@@ -37,6 +37,13 @@ edpf_verify_result* ebpf_verify_program(ebpf_verify_and_load_arg *args, CLIENT* 
     }
 
     printf("BEFORE LOAD: %s\n", args->info->object_name);
+    printf("val2: ");
+    for(int i = 0; i < sizeof(*(args->info->instructions.instructions_val)); i++)
+    {
+        printf("%02x",((unsigned char*)args->info->instructions.instructions_val)[i]);
+    }
+    printf(" opcode %i", args->info->instructions.instructions_val->offset);
+    printf("\n");
 
     edpf_verify_result* svr_rst = ebpf_verify_load_program_1(args, clt);
     if (!svr_rst) {
@@ -58,13 +65,47 @@ ebpf_program_load_info* ebpf_load_program(const char * file_path)
 
     printf("Opened file!\n");
 
-    ebpf_instruction_t** instructions = (ebpf_instruction_t**) malloc(sizeof(ebpf_instruction_t) * raw_progs.back().prog.size());
-
-    uint inst_count = 0;
+    // std::vector<ebpf_instruction_t> instructions;
+    ebpf_instruction_t* instructions = (ebpf_instruction_t*) malloc(sizeof(ebpf_instruction_t) * raw_prog.prog.size());
+    short count = 0;
     for(ebpf_inst original_inst : raw_prog.prog)
     {
-        instructions[inst_count++] = reinterpret_cast<ebpf_instruction_t*>(&original_inst);
+        ebpf_instruction_t* inst = (ebpf_instruction_t*) malloc(sizeof(ebpf_instruction_t));
+        memcpy(inst, reinterpret_cast<ebpf_instruction_t*>(&original_inst), sizeof(ebpf_instruction_t));
+
+        printf("sending inst original: ");
+        for(int i = 0; i < sizeof(original_inst); i++)
+        {
+            printf("%02x",((unsigned char*)&original_inst)[i]);
+        }
+        printf(" opcode %i", original_inst.offset);
+        printf("\n");
+
+        printf("sending inst converted: ");
+        for(int i = 0; i < sizeof(inst); i++)
+        {
+            printf("%02x",((unsigned char*)inst)[i]);
+        }
+        printf(" opcode %i", inst->offset);
+        printf("\n");
+
+        instructions[count] = *inst;
+        count++;
     }
+
+    printf("\n");
+    // for(ebpf_instruction_t original_inst : instructions)
+    // {
+    //     printf("vector converted: ");
+    //     for(int i = 0; i < sizeof(original_inst); i++)
+    //     {
+    //         printf("%02x",((unsigned char*)&original_inst)[i]);
+    //     }
+    //     printf(" opcode %i", original_inst.offset);
+    //     printf("\n");
+    // }
+
+    // printf("count: %i; len: %i\n", count, instructions.size());
 
     ebpf_prog_type_t *prog_type = (ebpf_prog_type_t*) malloc(sizeof(ebpf_prog_type_t));
     strcpy(prog_type->name, raw_prog.info.type.name.c_str());
@@ -78,9 +119,30 @@ ebpf_program_load_info* ebpf_load_program(const char * file_path)
     info->program_name = "a";
     info->program_type = prog_type;
     info->program_handle = 1;
-    info->instructions = instructions[0];
-    info->instruction_count = inst_count;
+    info->instruction =  instructions;
+    info->instructions.instructions_val = instructions;
+    info->instructions.instructions_len = raw_prog.prog.size();
     info->handle_map = handle_map;
+
+    printf("val0: ");
+    for(int i = 0; i < sizeof(*(info->instructions.instructions_val)); i++)
+    {
+        printf("%02x",((unsigned char*)info->instructions.instructions_val)[i]);
+    }
+    printf(" opcode %i", info->instructions.instructions_val->offset);
+    printf("\n");
+
+    // this works
+    // info->instruction = (ebpf_instruction_t*) malloc(sizeof(ebpf_instruction_t));
+    // info->instruction->offset = 1234;
+
+    printf("instruction1: ");
+    for(int i = 0; i < sizeof(*(info->instruction)); i++)
+    {
+        printf("%02x",((unsigned char*)info->instruction)[i]);
+    }
+    printf(" opcode %i", info->instruction->offset);
+    printf("\n");
 
     printf("name: %s\n", info->object_name);
 

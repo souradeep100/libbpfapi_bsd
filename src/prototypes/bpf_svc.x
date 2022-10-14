@@ -68,8 +68,8 @@ struct _ebpf_program_load_info {
     int program_handle;
     unsigned int map_count;
     original_fd_handle_map_t *handle_map;
-    unsigned int instruction_count;
-    ebpf_instruction_t *instructions;
+    ebpf_instruction_t instructions<>;
+	ebpf_instruction_t *instruction;
 };
 
 typedef struct _ebpf_program_load_info ebpf_program_load_info;
