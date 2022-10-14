@@ -94,18 +94,6 @@ ebpf_program_load_info* ebpf_load_program(const char * file_path)
     }
 
     printf("\n");
-    // for(ebpf_instruction_t original_inst : instructions)
-    // {
-    //     printf("vector converted: ");
-    //     for(int i = 0; i < sizeof(original_inst); i++)
-    //     {
-    //         printf("%02x",((unsigned char*)&original_inst)[i]);
-    //     }
-    //     printf(" opcode %i", original_inst.offset);
-    //     printf("\n");
-    // }
-
-    // printf("count: %i; len: %i\n", count, instructions.size());
 
     ebpf_prog_type_t *prog_type = (ebpf_prog_type_t*) malloc(sizeof(ebpf_prog_type_t));
     strcpy(prog_type->name, raw_prog.info.type.name.c_str());
@@ -119,32 +107,9 @@ ebpf_program_load_info* ebpf_load_program(const char * file_path)
     info->program_name = "a";
     info->program_type = prog_type;
     info->program_handle = 1;
-    info->instruction =  instructions;
     info->instructions.instructions_val = instructions;
     info->instructions.instructions_len = raw_prog.prog.size();
     info->handle_map = handle_map;
-
-    printf("val0: ");
-    for(int i = 0; i < sizeof(*(info->instructions.instructions_val)); i++)
-    {
-        printf("%02x",((unsigned char*)info->instructions.instructions_val)[i]);
-    }
-    printf(" opcode %i", info->instructions.instructions_val->offset);
-    printf("\n");
-
-    // this works
-    // info->instruction = (ebpf_instruction_t*) malloc(sizeof(ebpf_instruction_t));
-    // info->instruction->offset = 1234;
-
-    printf("instruction1: ");
-    for(int i = 0; i < sizeof(*(info->instruction)); i++)
-    {
-        printf("%02x",((unsigned char*)info->instruction)[i]);
-    }
-    printf(" opcode %i", info->instruction->offset);
-    printf("\n");
-
-    printf("name: %s\n", info->object_name);
 
     return info;
 }

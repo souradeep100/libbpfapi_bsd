@@ -49,15 +49,15 @@ ebpf_result_t verify_byte_code(
 {
     const ebpf_platform_t* platform = &g_ebpf_platform_linux;
     std::vector<ebpf_inst> instructions{instruction_array, instruction_array + instruction_count};
-    // for (ebpf_inst inst : instructions)
-    // {
-    //     printf("received inst: ");
-    //     for(int i = 0; i < sizeof(inst); i++)
-    //     {
-    //         printf("%02x",((unsigned char*)&inst)[i]);
-    //     }
-    //     printf("\n");
-    // }
+    for (ebpf_inst inst : instructions)
+    {
+        printf("received inst: ");
+        for(int i = 0; i < sizeof(inst); i++)
+        {
+            printf("%02x",((unsigned char*)&inst)[i]);
+        }
+        printf("\n");
+    }
     log_info("Built instructions vector...\n");
     program_info info{platform};
     std::string section;
