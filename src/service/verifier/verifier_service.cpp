@@ -13,7 +13,9 @@ static ebpf_result_t _analyze(raw_program& raw_prog, const char* error_message)
     std::variant<InstructionSeq, std::string> prog_or_error = unmarshal(raw_prog);
     if (!std::holds_alternative<InstructionSeq>(prog_or_error))
     {
+        // TODO: we are getting "2: invalid helper function id" here
         log_info("Unmarshalling error\n");
+        log_info(std::get<std::string>(prog_or_error).c_str());
         // *error_message = allocate_string(std::get<std::string>(prog_or_error), error_message_size);
         return EBPF_VERIFICATION_FAILED; // Error;
     }
@@ -25,6 +27,9 @@ static ebpf_result_t _analyze(raw_program& raw_prog, const char* error_message)
     ebpf_verifier_stats_t stats;
     options.check_termination = true;
     bool res = ebpf_verify_program(std::cout, prog, raw_prog.info, &options, &stats);
+    log_info("VERIFY RESULT: ");
+    log_info(res ? "true" : "false");
+    log_info("\n");
     if (!res) {
         // On failure, retry to get the more detailed error message.
         std::ostringstream oss;
@@ -33,6 +38,9 @@ static ebpf_result_t _analyze(raw_program& raw_prog, const char* error_message)
         (void)ebpf_verify_program(oss, prog, raw_prog.info, &options, &stats);
 
         // *error_message = allocate_string(oss.str(), error_message_size);
+        log_info("VERIFICATION DETAILS: ");
+        log_info(oss.str().c_str());
+        log_info("\n");
         return EBPF_VERIFICATION_FAILED; // Error;
     }
     return EBPF_SUCCESS; // Success.
@@ -45,43 +53,58 @@ ebpf_result_t verify_byte_code(
     const ebpf_prog_type_t* program_type,
     const ebpf_inst* instruction_array,
     unsigned int instruction_count,
+    const EbpfMapDescriptor * maps_array,
+    uint32_t maps_count,
     char *error_message)
 {
-    const ebpf_platform_t* platform = &g_ebpf_platform_linux;
     std::vector<ebpf_inst> instructions{instruction_array, instruction_array + instruction_count};
-    for (ebpf_inst inst : instructions)
-    {
-        printf("received inst: ");
-        for(int i = 0; i < sizeof(inst); i++)
-        {
-            printf("%02x",((unsigned char*)&inst)[i]);
-        }
-        printf("\n");
-    }
-    log_info("Built instructions vector...\n");
-    program_info info{platform};
+    std::vector<EbpfMapDescriptor> maps{maps_array, maps_array + maps_count};
     std::string section;
     std::string file;
     std::vector<raw_program> raw_progs;
-    try
+
+    for (EbpfMapDescriptor map : maps)
     {
-        // TODO: verification works by using read_elf, need to start implementing posix functions
-        log_info("Opening file...\n");
-        raw_progs = read_elf("/home/edguer/Projects/libbpfapi_bsd/external/ebpf-verifier/ebpf-samples/cilium/bpf_lxc.o", "2/1", &ebpf_verifier_default_options, &g_ebpf_platform_linux);
-        info.type = raw_progs.back().info.type;
-        log_info("Parsed ELF file\n");
-        // info.type = get_program_type_windows(*program_type);
-    }
-    catch (std::runtime_error e) {
-        *error_message = *e.what();
-        log_info("Verification failed...\n");
-        return EBPF_VERIFICATION_FAILED;
+        printf("Original map %i\n", map.original_fd);
     }
 
-    if (raw_progs.size() > 0)
+    ebpf_context_descriptor_t cxt_descriptor
     {
-        log_info("More than 1 raw_progs...\n");
+        .size = program_type->context_descriptor.size,
+        .data = program_type->context_descriptor.data,
+        .end = program_type->context_descriptor.end,
+        .meta = program_type->context_descriptor.meta
+    };
+
+    std::vector<std::string> section_prefixes(program_type->section_prefixes.section_prefixes_len);
+    for (size_t i = 0; i < program_type->section_prefixes.section_prefixes_len; i++)
+    {
+        section_prefixes.push_back(program_type->section_prefixes.section_prefixes_val[i].str);
     }
+
+    EbpfProgramType type
+    {
+        .name = program_type->name,
+        .context_descriptor = &cxt_descriptor,
+        .platform_specific_data = program_type->platform_specific_data,
+        .section_prefixes = section_prefixes,
+        .is_privileged = program_type->is_privileged
+    };
+
+    program_info info{&g_ebpf_platform_linux, maps, type};
+
+    // try
+    // {
+    //     log_info("Opening file...\n");
+    //     raw_progs = read_elf("/home/edguer/Projects/libbpfapi_bsd/external/ebpf-verifier/ebpf-samples/cilium/bpf_lxc.o", "2/1", nullptr, &g_ebpf_platform_linux);
+    //     info.type = raw_progs.back().info.type;
+    //     log_info("Parsed ELF file\n");
+    // }
+    // catch (std::runtime_error e) {
+    //     *error_message = *e.what();
+    //     log_info("Verification failed...\n");
+    //     return EBPF_VERIFICATION_FAILED;
+    // }
 
     raw_program raw_prog{file, section, instructions, info};
 

@@ -1,0 +1,160 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						6
+					]
+				},
+				{
+					"build" : "external",
+					"childIndexes" : 
+					[
+						2
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "external"
+				},
+				{
+					"build" : "external/ebpf-verifier",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "external/ebpf-verifier",
+					"targetIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "BPF_SVC",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						6
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "ebpf_verifier",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "bpf_lib::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-bpf_lib-Debug-27eb0210858147b199a7.json",
+					"name" : "bpf_lib",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "bpf_svc::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-bpf_svc-Debug-5be7c2e708154889aae6.json",
+					"name" : "bpf_svc",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "check::@9d044ca0e0ea263b3c61",
+					"jsonFile" : "target-check-Debug-8ad522236e9d581db6d0.json",
+					"name" : "check",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "ebpfverifier::@9d044ca0e0ea263b3c61",
+					"jsonFile" : "target-ebpfverifier-Debug-21d85f53b96722c99aa1.json",
+					"name" : "ebpfverifier",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "run_yaml::@9d044ca0e0ea263b3c61",
+					"jsonFile" : "target-run_yaml-Debug-246c7ae24d9948355b4c.json",
+					"name" : "run_yaml",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "tests::@9d044ca0e0ea263b3c61",
+					"jsonFile" : "target-tests-Debug-da6582f64d55cc3d8995.json",
+					"name" : "tests",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "verification_and_load_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-verification_and_load_test-Debug-a756694e4505f39666b9.json",
+					"name" : "verification_and_load_test",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/edguer/Projects/libbpfapi_bsd/build",
+		"source" : "/home/edguer/Projects/libbpfapi_bsd"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

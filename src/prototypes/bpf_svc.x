@@ -32,12 +32,12 @@ struct _original_fd_handle_map {
 
 typedef struct _original_fd_handle_map original_fd_handle_map_t;
 
-struct _string_list
+struct _string_item
 {
 	string str<>;
 };
 
-typedef _string_list string_list;
+typedef _string_item string_item_t;
 
 struct __ebpf_context_descriptor {
     int size;
@@ -51,18 +51,30 @@ typedef __ebpf_context_descriptor ebpf_cxt_descriptor_t;
 struct _ebpf_prog_type {
 	string name<>;
     ebpf_cxt_descriptor_t context_descriptor;
-    unsigned int platform_specific_data;
-	opaque section_prefixes[100];
+    unsigned long platform_specific_data;
+	string_item_t section_prefixes<>;
     bool is_privileged;
 };
 
 typedef _ebpf_prog_type ebpf_prog_type_t;
+
+struct _ebpf_map_descriptor {
+    int original_fd;
+    unsigned int type;
+    unsigned int key_size;
+    unsigned int value_size;
+    unsigned int max_entries;
+    unsigned int inner_map_fd;
+};
+
+typedef _ebpf_map_descriptor ebpf_map_descriptor_t;
 
 struct _ebpf_program_load_info {
     string object_name<>;
     string section_name<>;
     string program_name<>;
     ebpf_prog_type_t* program_type;
+	ebpf_map_descriptor_t map_descriptors<>;
     ebpf_execution_type_t execution_type;
 	ebpf_execution_context_t execution_context;
     int program_handle;

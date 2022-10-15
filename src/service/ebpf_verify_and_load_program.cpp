@@ -17,6 +17,8 @@ ebpf_result_t ebpf_verify_and_load_program(
     const original_fd_handle_map_t *handle_map,
     uint32_t instruction_count,
     const ebpf_inst *instructions,
+    uint32_t maps_count,
+    const EbpfMapDescriptor * maps,
     char *error_message)
 {
     ebpf_result_t result = EBPF_SUCCESS;
@@ -31,7 +33,7 @@ ebpf_result_t ebpf_verify_and_load_program(
         set_verification_in_progress(true);
 
         log_info("Calling verify_byte_code...\n");
-        result = verify_byte_code(program_type, instructions, instruction_count, error_message);
+        result = verify_byte_code(program_type, instructions, instruction_count, maps, maps_count, error_message);
     }
     catch (const std::bad_alloc&)
     {
@@ -75,7 +77,7 @@ edpf_verify_result *ebpf_verify_load_program_1_svc(ebpf_verify_and_load_arg *arg
     log_info("Verifying BPF program...\n");
 
     result.result = ebpf_verify_and_load_program(
-        NULL,
+        args->info->program_type,
         args->info->program_handle,
         args->info->execution_context,
         args->info->execution_type,
@@ -83,6 +85,8 @@ edpf_verify_result *ebpf_verify_load_program_1_svc(ebpf_verify_and_load_arg *arg
         args->info->handle_map,
         args->info->instructions.instructions_len,
         reinterpret_cast<ebpf_inst*>(args->info->instructions.instructions_val),
+        args->info->map_descriptors.map_descriptors_len,
+        reinterpret_cast<EbpfMapDescriptor*>(args->info->map_descriptors.map_descriptors_val),
         result.message);
 
     ebpf_clear_thread_local_storage();
