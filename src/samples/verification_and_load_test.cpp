@@ -8,6 +8,7 @@ int main (int argc, char **argv)
     printf("Opened connection...\n");
 
     ebpf_program_load_info* prog_info = ebpf_load_program("/home/edguer/Projects/libbpfapi_bsd/external/ebpf-verifier/ebpf-samples/cilium/bpf_lxc.o", "2/1");
+    // ebpf_program_load_info* prog_info = ebpf_load_program("/home/edguer/Projects/ebpf-verifier/ebpf-samples/invalid/badsymsize.o", "2/1");
 
     ebpf_verify_and_load_arg* args = (ebpf_verify_and_load_arg*) malloc(sizeof(ebpf_verify_and_load_arg));
     args->info = prog_info;
@@ -20,7 +21,7 @@ int main (int argc, char **argv)
     }
     else
     {
-        printf("Done sending the request\n");
+        printf("Program is valid!\n");
     }
 
     return result->result;

@@ -63,18 +63,7 @@ ebpf_result_t verify_byte_code(
     std::string file;
     std::vector<raw_program> raw_progs;
 
-    for (EbpfMapDescriptor map : maps)
-    {
-        printf("Original map %i\n", map.original_fd);
-    }
-
-    ebpf_context_descriptor_t cxt_descriptor
-    {
-        .size = program_type->context_descriptor.size,
-        .data = program_type->context_descriptor.data,
-        .end = program_type->context_descriptor.end,
-        .meta = program_type->context_descriptor.meta
-    };
+    ebpf_context_descriptor_t cxt_descriptor { program_type->context_descriptor.size, program_type->context_descriptor.data, program_type->context_descriptor.end, program_type->context_descriptor.meta };
 
     std::vector<std::string> section_prefixes(program_type->section_prefixes.section_prefixes_len);
     for (size_t i = 0; i < program_type->section_prefixes.section_prefixes_len; i++)
@@ -92,19 +81,6 @@ ebpf_result_t verify_byte_code(
     };
 
     program_info info{&g_ebpf_platform_linux, maps, type};
-
-    // try
-    // {
-    //     log_info("Opening file...\n");
-    //     raw_progs = read_elf("/home/edguer/Projects/libbpfapi_bsd/external/ebpf-verifier/ebpf-samples/cilium/bpf_lxc.o", "2/1", nullptr, &g_ebpf_platform_linux);
-    //     info.type = raw_progs.back().info.type;
-    //     log_info("Parsed ELF file\n");
-    // }
-    // catch (std::runtime_error e) {
-    //     *error_message = *e.what();
-    //     log_info("Verification failed...\n");
-    //     return EBPF_VERIFICATION_FAILED;
-    // }
 
     raw_program raw_prog{file, section, instructions, info};
 

@@ -92,7 +92,6 @@ ebpf_program_load_info* ebpf_load_program(const char * file_path, const char * s
     prog_type->platform_specific_data = raw_prog.info.type.platform_specific_data;
 
     ebpf_map_descriptor_t * ebpf_map_descriptors = (ebpf_map_descriptor_t *) malloc(sizeof(ebpf_map_descriptor_t) * raw_prog.info.map_descriptors.size());
-    printf("Size map %i, new %i\n", sizeof(EbpfMapDescriptor), sizeof(ebpf_map_descriptor_t));
     unsigned int map_descriptors_count = 0;
     for (EbpfMapDescriptor map : raw_prog.info.map_descriptors)
     {
@@ -100,8 +99,6 @@ ebpf_program_load_info* ebpf_load_program(const char * file_path, const char * s
         memcpy(converted_map, reinterpret_cast<ebpf_map_descriptor_t*>(&map), sizeof(ebpf_map_descriptor_t));
 
         ebpf_map_descriptors[map_descriptors_count++] = *converted_map;
-
-        printf("Original map %i, new %i\n", map.original_fd, ebpf_map_descriptors[map_descriptors_count - 1].original_fd);
     }
 
     original_fd_handle_map_t *handle_map = (original_fd_handle_map_t*) malloc(sizeof(original_fd_handle_map_t*));
