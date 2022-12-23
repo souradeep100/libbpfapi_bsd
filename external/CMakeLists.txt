@@ -1,3 +1,5 @@
+find_package(yaml-cpp REQUIRED)
+
 add_subdirectory("ebpf-verifier" EXCLUDE_FROM_ALL)
 
 cmake_policy(SET CMP0079 NEW)
@@ -18,9 +20,9 @@ target_include_directories("ebpfverifier" INTERFACE
   ebpf-verifier/external/elfio
 )
 
-add_dependencies("ebpfverifier"
-  "yaml-cpp"
-)
+# add_dependencies("ebpfverifier"
+#   "yaml-cpp"
+# )
 
 add_library("external::ebpfverifier" ALIAS "ebpfverifier")
 

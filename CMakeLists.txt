@@ -3,8 +3,19 @@ cmake_minimum_required(VERSION 3.10)
 project(BPF_SVC)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES /usr/local/lib ${CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES})
+
+find_library(yaml-cpp HINTS /usr/local/lib/)
+# find_package(Boost REQUIRED)
+
+# find_library(yaml_cpp_location NAMES yaml-cpp.so yaml-cpp.a yaml-cpp.o)
+# message(STATUS ${yaml_cpp_location})
+
+# add_library(yaml_cpp STATIC IMPORTED)
+# set_target_properties(yaml_cpp PROPERTIES IMPORTED_LOCATION ${yaml_cpp_location})
 
 # ebpf-verifier includes
+include_directories(/usr/local/include)
 include_directories(external/ebpf-verifier/src)
 include_directories(external/ebpf-verifier/src/external)
 
