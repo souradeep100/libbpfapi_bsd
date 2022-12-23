@@ -8,7 +8,7 @@
 
 ## Build
 
-Run 'cmake -DCMAKE_C_COMPILER=/usr/local/bin/gcc -B .build && cmake --build .build'
+Run 'export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/lib && cmake -B .build && cmake --build .build'
 Make sure the gcc path is pointing to the right binary.
 
 ## Running the service

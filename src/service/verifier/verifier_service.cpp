@@ -77,7 +77,7 @@ ebpf_result_t verify_byte_code(
         .context_descriptor = &cxt_descriptor,
         .platform_specific_data = program_type->platform_specific_data,
         .section_prefixes = section_prefixes,
-        .is_privileged = program_type->is_privileged
+        .is_privileged = (bool)program_type->is_privileged
     };
 
     program_info info{&g_ebpf_platform_linux, maps, type};
