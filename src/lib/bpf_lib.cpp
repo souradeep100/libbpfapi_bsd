@@ -5,6 +5,7 @@ CLIENT* ebpf_connect(char *host)
     CLIENT *clt = clnt_create(host, BPF_SVC, BPF_SVC_V1, "tcp");
     if (clt == NULL) {
         printf("Error connecting to eBPF server.\n");
+        return NULL;
     }
 
     return clt;

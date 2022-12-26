@@ -7,6 +7,9 @@
 #include "../../prototypes/bpf_svc.h"
 #include "../common.hpp"
 
+extern const ebpf_platform_t g_ebpf_platform_linux;
+extern const ebpf_verifier_options_t ebpf_verifier_default_options;
+
 static ebpf_result_t _analyze(raw_program& raw_prog, const char* error_message)
 {
     log_info("Unmarshalling...\n");
@@ -20,9 +23,8 @@ static ebpf_result_t _analyze(raw_program& raw_prog, const char* error_message)
         return EBPF_VERIFICATION_FAILED; // Error;
     }
 
-    InstructionSeq& prog = std::get<InstructionSeq>(prog_or_error);
-
     // First try optimized for the success case.
+    InstructionSeq& prog = std::get<InstructionSeq>(prog_or_error);
     ebpf_verifier_options_t options = ebpf_verifier_default_options;
     ebpf_verifier_stats_t stats;
     options.check_termination = true;
@@ -45,9 +47,6 @@ static ebpf_result_t _analyze(raw_program& raw_prog, const char* error_message)
     }
     return EBPF_SUCCESS; // Success.
 }
-
-extern const ebpf_platform_t g_ebpf_platform_linux;
-extern const ebpf_verifier_options_t ebpf_verifier_default_options;
 
 ebpf_result_t verify_byte_code(
     const ebpf_prog_type_t* program_type,

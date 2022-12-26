@@ -5,6 +5,11 @@ int main (int argc, char **argv)
     printf("Starting client...\n");
 
     CLIENT *clt = ebpf_connect("localhost");
+    if (clt == NULL)
+    {
+        return -1;
+    }
+    
     printf("Opened connection...\n");
 
     ebpf_program_load_info* prog_info = ebpf_load_program("/media/data/libbpfapi_bsd/external/ebpf-verifier/ebpf-samples/cilium/bpf_lxc.o", "2/1");
@@ -16,7 +21,7 @@ int main (int argc, char **argv)
 
     if (result->result != 0)
     {
-        printf("ERROR: status code is %d\n", (int)result->result);
+        printf("ERROR: status code is %d\n", result->result);
     }
     else
     {
