@@ -8,7 +8,8 @@
 
 ## Build
 
-Run 'src/build.sh'
+Run 'export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/lib && cmake -B .build && cmake --build .build'
+Make sure the gcc path is pointing to the right binary.
 
 ## Running the service
 

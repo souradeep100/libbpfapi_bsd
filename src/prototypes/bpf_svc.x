@@ -1,181 +1,3 @@
-enum bpf_cmd {
-	BPF_MAP_CREATE,
-	BPF_MAP_LOOKUP_ELEM,
-	BPF_MAP_UPDATE_ELEM,
-	BPF_MAP_DELETE_ELEM,
-	BPF_MAP_GET_NEXT_KEY,
-	BPF_PROG_LOAD,
-	BPF_OBJ_PIN,
-	BPF_OBJ_GET,
-	BPF_PROG_ATTACH,
-	BPF_PROG_DETACH,
-	BPF_PROG_TEST_RUN,
-	BPF_PROG_RUN = BPF_PROG_TEST_RUN,
-	BPF_PROG_GET_NEXT_ID,
-	BPF_MAP_GET_NEXT_ID,
-	BPF_PROG_GET_FD_BY_ID,
-	BPF_MAP_GET_FD_BY_ID,
-	BPF_OBJ_GET_INFO_BY_FD,
-	BPF_PROG_QUERY,
-	BPF_RAW_TRACEPOINT_OPEN,
-	BPF_BTF_LOAD,
-	BPF_BTF_GET_FD_BY_ID,
-	BPF_TASK_FD_QUERY,
-	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
-	BPF_MAP_FREEZE,
-	BPF_BTF_GET_NEXT_ID,
-	BPF_MAP_LOOKUP_BATCH,
-	BPF_MAP_LOOKUP_AND_DELETE_BATCH,
-	BPF_MAP_UPDATE_BATCH,
-	BPF_MAP_DELETE_BATCH,
-	BPF_LINK_CREATE,
-	BPF_LINK_UPDATE,
-	BPF_LINK_GET_FD_BY_ID,
-	BPF_LINK_GET_NEXT_ID,
-	BPF_ENABLE_STATS,
-	BPF_ITER_CREATE,
-	BPF_LINK_DETACH,
-	BPF_PROG_BIND_MAP
-};
-
-enum bpf_map_type {
-	BPF_MAP_TYPE_UNSPEC,
-	BPF_MAP_TYPE_HASH,
-	BPF_MAP_TYPE_ARRAY,
-	BPF_MAP_TYPE_PROG_ARRAY,
-	BPF_MAP_TYPE_PERF_EVENT_ARRAY,
-	BPF_MAP_TYPE_PERCPU_HASH,
-	BPF_MAP_TYPE_PERCPU_ARRAY,
-	BPF_MAP_TYPE_STACK_TRACE,
-	BPF_MAP_TYPE_CGROUP_ARRAY,
-	BPF_MAP_TYPE_LRU_HASH,
-	BPF_MAP_TYPE_LRU_PERCPU_HASH,
-	BPF_MAP_TYPE_LPM_TRIE,
-	BPF_MAP_TYPE_ARRAY_OF_MAPS,
-	BPF_MAP_TYPE_HASH_OF_MAPS,
-	BPF_MAP_TYPE_DEVMAP,
-	BPF_MAP_TYPE_SOCKMAP,
-	BPF_MAP_TYPE_CPUMAP,
-	BPF_MAP_TYPE_XSKMAP,
-	BPF_MAP_TYPE_SOCKHASH,
-	BPF_MAP_TYPE_CGROUP_STORAGE,
-	BPF_MAP_TYPE_REUSEPORT_SOCKARRAY,
-	BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE,
-	BPF_MAP_TYPE_QUEUE,
-	BPF_MAP_TYPE_STACK,
-	BPF_MAP_TYPE_SK_STORAGE,
-	BPF_MAP_TYPE_DEVMAP_HASH,
-	BPF_MAP_TYPE_STRUCT_OPS,
-	BPF_MAP_TYPE_RINGBUF,
-	BPF_MAP_TYPE_INODE_STORAGE,
-	BPF_MAP_TYPE_TASK_STORAGE,
-	BPF_MAP_TYPE_BLOOM_FILTER
-};
-
-enum bpf_prog_type {
-	BPF_PROG_TYPE_UNSPEC,
-	BPF_PROG_TYPE_SOCKET_FILTER,
-	BPF_PROG_TYPE_KPROBE,
-	BPF_PROG_TYPE_SCHED_CLS,
-	BPF_PROG_TYPE_SCHED_ACT,
-	BPF_PROG_TYPE_TRACEPOINT,
-	BPF_PROG_TYPE_XDP,
-	BPF_PROG_TYPE_PERF_EVENT,
-	BPF_PROG_TYPE_CGROUP_SKB,
-	BPF_PROG_TYPE_CGROUP_SOCK,
-	BPF_PROG_TYPE_LWT_IN,
-	BPF_PROG_TYPE_LWT_OUT,
-	BPF_PROG_TYPE_LWT_XMIT,
-	BPF_PROG_TYPE_SOCK_OPS,
-	BPF_PROG_TYPE_SK_SKB,
-	BPF_PROG_TYPE_CGROUP_DEVICE,
-	BPF_PROG_TYPE_SK_MSG,
-	BPF_PROG_TYPE_RAW_TRACEPOINT,
-	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
-	BPF_PROG_TYPE_LWT_SEG6LOCAL,
-	BPF_PROG_TYPE_LIRC_MODE2,
-	BPF_PROG_TYPE_SK_REUSEPORT,
-	BPF_PROG_TYPE_FLOW_DISSECTOR,
-	BPF_PROG_TYPE_CGROUP_SYSCTL,
-	BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
-	BPF_PROG_TYPE_CGROUP_SOCKOPT,
-	BPF_PROG_TYPE_TRACING,
-	BPF_PROG_TYPE_STRUCT_OPS,
-	BPF_PROG_TYPE_EXT,
-	BPF_PROG_TYPE_LSM,
-	BPF_PROG_TYPE_SK_LOOKUP,
-	BPF_PROG_TYPE_SYSCALL
-};
-
-enum bpf_attach_type {
-	BPF_CGROUP_INET_INGRESS,
-	BPF_CGROUP_INET_EGRESS,
-	BPF_CGROUP_INET_SOCK_CREATE,
-	BPF_CGROUP_SOCK_OPS,
-	BPF_SK_SKB_STREAM_PARSER,
-	BPF_SK_SKB_STREAM_VERDICT,
-	BPF_CGROUP_DEVICE,
-	BPF_SK_MSG_VERDICT,
-	BPF_CGROUP_INET4_BIND,
-	BPF_CGROUP_INET6_BIND,
-	BPF_CGROUP_INET4_CONNECT,
-	BPF_CGROUP_INET6_CONNECT,
-	BPF_CGROUP_INET4_POST_BIND,
-	BPF_CGROUP_INET6_POST_BIND,
-	BPF_CGROUP_UDP4_SENDMSG,
-	BPF_CGROUP_UDP6_SENDMSG,
-	BPF_LIRC_MODE2,
-	BPF_FLOW_DISSECTOR,
-	BPF_CGROUP_SYSCTL,
-	BPF_CGROUP_UDP4_RECVMSG,
-	BPF_CGROUP_UDP6_RECVMSG,
-	BPF_CGROUP_GETSOCKOPT,
-	BPF_CGROUP_SETSOCKOPT,
-	BPF_TRACE_RAW_TP,
-	BPF_TRACE_FENTRY,
-	BPF_TRACE_FEXIT,
-	BPF_MODIFY_RETURN,
-	BPF_LSM_MAC,
-	BPF_TRACE_ITER,
-	BPF_CGROUP_INET4_GETPEERNAME,
-	BPF_CGROUP_INET6_GETPEERNAME,
-	BPF_CGROUP_INET4_GETSOCKNAME,
-	BPF_CGROUP_INET6_GETSOCKNAME,
-	BPF_XDP_DEVMAP,
-	BPF_CGROUP_INET_SOCK_RELEASE,
-	BPF_XDP_CPUMAP,
-	BPF_SK_LOOKUP,
-	BPF_XDP,
-	BPF_SK_SKB_VERDICT,
-	BPF_SK_REUSEPORT_SELECT,
-	BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
-	BPF_PERF_EVENT,
-	BPF_TRACE_KPROBE_MULTI,
-	BPF_LSM_CGROUP,
-	__MAX_BPF_ATTACH_TYPE
-};
-
-enum bpf_link_type {
-	BPF_LINK_TYPE_UNSPEC = 0,
-	BPF_LINK_TYPE_RAW_TRACEPOINT = 1,
-	BPF_LINK_TYPE_TRACING = 2,
-	BPF_LINK_TYPE_CGROUP = 3,
-	BPF_LINK_TYPE_ITER = 4,
-	BPF_LINK_TYPE_NETNS = 5,
-	BPF_LINK_TYPE_XDP = 6,
-	BPF_LINK_TYPE_PERF_EVENT = 7,
-	BPF_LINK_TYPE_KPROBE_MULTI = 8,
-	BPF_LINK_TYPE_STRUCT_OPS = 9,
-	MAX_BPF_LINK_TYPE
-};
-
-enum bpf_map_update_elem {
-	BPF_ANY		= 0, /* create new element or update existing */
-	BPF_NOEXIST	= 1, /* create new element if it didn't exist */
-	BPF_EXIST	= 2, /* update existing element */
-	BPF_F_LOCK	= 4 /* spin_lock-ed map_lookup/map_update */
-};
-
 enum _ebpf_execution_type {
     EBPF_EXECUTION_ANY,
     EBPF_EXECUTION_JIT,
@@ -185,10 +7,18 @@ enum _ebpf_execution_type {
 
 typedef enum _ebpf_execution_type ebpf_execution_type_t;
 
+enum _ebpf_execution_context
+{
+	execution_context_user_mode,
+	execution_context_kernel_mode
+};
+
+typedef enum _ebpf_execution_context ebpf_execution_context_t;
+
 struct _ebpf_instruction {
-    unsigned int opcode;
-    unsigned int dst_src;
-    int offset;
+    opaque opcode[1];
+    opaque dst_src[1];
+    short offset;
     int imm;
 };
 
@@ -202,30 +32,102 @@ struct _original_fd_handle_map {
 
 typedef struct _original_fd_handle_map original_fd_handle_map_t;
 
+struct _string_item
+{
+	string str<>;
+};
+
+typedef _string_item string_item_t;
+
+struct __ebpf_context_descriptor {
+    int size;
+    int data;
+    int end;
+    int meta;
+};
+
+typedef __ebpf_context_descriptor ebpf_cxt_descriptor_t;
+
+struct _ebpf_prog_type {
+	string name<>;
+    ebpf_cxt_descriptor_t context_descriptor;
+    unsigned long platform_specific_data;
+	string_item_t section_prefixes<>;
+    bool is_privileged;
+};
+
+typedef _ebpf_prog_type ebpf_prog_type_t;
+
+struct _ebpf_map_descriptor {
+    int original_fd;
+    unsigned int type;
+    unsigned int key_size;
+    unsigned int value_size;
+    unsigned int max_entries;
+    unsigned int inner_map_fd;
+};
+
+typedef _ebpf_map_descriptor ebpf_map_descriptor_t;
+
 struct _ebpf_program_load_info {
     string object_name<>;
     string section_name<>;
     string program_name<>;
-    unsigned int program_type;
+    ebpf_prog_type_t* program_type;
+	ebpf_map_descriptor_t map_descriptors<>;
     ebpf_execution_type_t execution_type;
+	ebpf_execution_context_t execution_context;
     int program_handle;
     unsigned int map_count;
     original_fd_handle_map_t *handle_map;
-    unsigned int instruction_count;
-    ebpf_instruction_t *instructions;
+    ebpf_instruction_t instructions<>;
 };
 
 typedef struct _ebpf_program_load_info ebpf_program_load_info;
 
 struct ebpf_verify_and_load_arg {
     ebpf_program_load_info *info;
-    unsigned int *log_size;
-    char  *logs;
 };
 
 struct ebpf_verify_arg {
     string path<>;
 };
+
+enum _ebpf_result {
+	EBPF_SUCCESS = 0,
+	EBPF_VERIFICATION_FAILED = 1,
+	EBPF_JIT_COMPILATION_FAILED = 2,
+	EBPF_PROGRAM_LOAD_FAILED = 3,
+	EBPF_INVALID_FD = 4,
+	EBPF_INVALID_OBJECT = 5,
+	EBPF_INVALID_ARGUMENT = 6,
+	EBPF_OBJECT_NOT_FOUND = 7,
+	EBPF_OBJECT_ALREADY_EXISTS = 8,
+	EBPF_FILE_NOT_FOUND = 9,
+	EBPF_ALREADY_PINNED = 10,
+	EBPF_NOT_PINNED = 11,
+	EBPF_NO_MEMORY = 12,
+	EBPF_PROGRAM_TOO_LARGE = 13,
+	EBPF_RPC_EXCEPTION = 14,
+	EBPF_ALREADY_INITIALIZED = 15,
+	EBPF_ELF_PARSING_FAILED = 16,
+	EBPF_FAILED = 17,
+	EBPF_OPERATION_NOT_SUPPORTED = 18,
+	EBPF_KEY_NOT_FOUND = 19,
+	EBPF_ACCESS_DENIED = 20,
+	EBPF_BLOCKED_BY_POLICY = 21,
+	EBPF_ARITHMETIC_OVERFLOW = 22,
+	EBPF_EXTENSION_FAILED_TO_LOAD = 23,
+	EBPF_INSUFFICIENT_BUFFER = 24,
+	EBPF_NO_MORE_KEYS = 25,
+	EBPF_KEY_ALREADY_EXISTS = 26,
+	EBPF_NO_MORE_TAIL_CALLS = 27,
+	EBPF_PENDING = 29,
+	EBPF_OUT_OF_SPACE = 30,
+	EBPF_CANCELED = 31
+};
+
+typedef enum _ebpf_result ebpf_result_t;
 
 enum edpf_verify_result_code
 {
@@ -239,13 +141,12 @@ enum edpf_verify_result_code
 
 struct edpf_verify_result
 {
-	edpf_verify_result_code result;
+	ebpf_result_t result;
 	string message<>;
 };
 
 program BPF_SVC {
     version BPF_SVC_V1 {
-        int EBPF_VERIFY_LOAD_PROGRAM(ebpf_verify_and_load_arg) = 1;
-		edpf_verify_result EBPF_VERIFY_PROGRAM(ebpf_verify_arg) = 2;
+        edpf_verify_result EBPF_VERIFY_LOAD_PROGRAM(ebpf_verify_and_load_arg) = 1;
     } = 1;
 } = 0x2ffffffa;

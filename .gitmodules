@@ -1,0 +1,6 @@
+[submodule "ebpf-verifier"]
+	path = external/ebpf-verifier
+	url = git@github.com:vbpf/ebpf-verifier.git
+[submodule "external/ebpf-verifier"]
+	path = external/ebpf-verifier
+	url = git@github.com:vbpf/ebpf-verifier.git
